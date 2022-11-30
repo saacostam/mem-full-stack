@@ -3,9 +3,18 @@ import {} from 'dotenv/config';
 import connectDB from './db/index.js';
 import ankiCloneRouter from './routers/router-anki-clone.js';
 import cors from 'cors';
+import morgan from 'morgan';
+import fs from 'fs';
+import path from 'path';
+import { getDirName } from './utils/index.js';
 
 const app = express();
 
+// Logger Configuration
+const logStream = fs.createWriteStream(path.join( getDirName(), '../general.log' ), { flags: 'a' });
+app.use( morgan( 'combined', {stream: logStream} ) );
+
+// Middleware
 app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
